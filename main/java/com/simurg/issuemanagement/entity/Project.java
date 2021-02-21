@@ -3,6 +3,7 @@ package com.simurg.issuemanagement.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "project")
@@ -17,6 +18,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Email
     @Column(name = "project_name", length = 300)
     private String projectName;
 

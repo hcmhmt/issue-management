@@ -1,6 +1,7 @@
 package com.simurg.issuemanagement.service.impl;
 
 import com.simurg.issuemanagement.dto.IssueDto;
+import com.simurg.issuemanagement.dto.ProjectDto;
 import com.simurg.issuemanagement.entity.Issue;
 import com.simurg.issuemanagement.repository.IssueRepository;
 import com.simurg.issuemanagement.service.IssueService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -26,8 +28,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto save(IssueDto issue) {
-        if (issue.getDate() == null)
-            throw new IllegalArgumentException("Issue date cannot be empty!");
+        Optional.ofNullable(issue.getDate())
+                .orElseThrow(() -> new IllegalArgumentException("Issue date cannot be empty!"));
 
         Issue issueDb = modelMapper.map(issue, Issue.class);
         issueDb = issueRepository.save(issueDb);
@@ -37,7 +39,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto getById(Long id) {
-        return null;
+        return modelMapper.map(issueRepository.getOne(id), IssueDto.class);
     }
 
     @Override
@@ -53,7 +55,13 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Boolean delete(IssueDto issue) {
+    public IssueDto update(Long id, IssueDto issue) {
         return null;
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        issueRepository.deleteById(id);
+        return true;
     }
 }
